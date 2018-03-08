@@ -4,6 +4,8 @@
     "description": "Manage your deployments within vscode",
     "version": "0.0.1",
     "publisher": "lucaperret",
+    "repository": "lucaperret/vscode-now",
+    "license": "MIT",
     "engines": {
         "vscode": "^1.21.0"
     },
@@ -11,16 +13,50 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.sayHello"
+        "onCommand:extension.authentication.login",
+        "onCommand:extension.deploy",
+        "onView:nowExplorer"
     ],
     "main": "./out/extension",
     "contributes": {
+        "configuration": {
+            "type": "object",
+            "title": "Now configuration options",
+            "properties": {
+                "now.showExplorer": {
+                "type": "boolean",
+                "default": true,
+                "description": "Show or hide the Explorer."
+                }
+            }
+        },
         "commands": [
             {
-                "command": "extension.sayHello",
-                "title": "Hello World"
+                "command": "extension.authentication.login",
+                "title": "Login",
+                "category": "Now"
+            },
+            {
+                "command": "extension.authentication.verify",
+                "title": "Verify",
+                "category": "Now"
+            },
+            {
+                "command": "extension.deploy",
+                "title": "Deploy",
+                "description": "Deploy current directory",
+                "category": "Now"
             }
-        ]
+        ],
+        "views": {
+            "explorer": [
+                {
+                    "id": "nowExplorer",
+                    "name": "Now",
+                    "when": "config.now.showExplorer == true"
+                }
+            ]
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
@@ -30,10 +66,15 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.6",
-        "tslint": "^5.8.0",
+        "@types/mocha": "^2.2.42",
         "@types/node": "^7.0.43",
-        "@types/mocha": "^2.2.42"
+        "@types/request-promise-native": "^1.0.14",
+        "tslint": "^5.8.0",
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.6"
+    },
+    "dependencies": {
+        "moment": "^2.21.0",
+        "request-promise-native": "^1.0.5"
     }
 }
