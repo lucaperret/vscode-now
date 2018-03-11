@@ -16,6 +16,9 @@
         "onCommand:extension.authentication.setToken",
         "onCommand:extension.authentication.login",
         "onCommand:extension.authentication.verify",
+        "onCommand:extension.deployment.logs",
+        "onCommand:extension.deployment.open",
+        "onCommand:extension.deployment.setAlias",
         "onCommand:extension.deployment.deploy",
         "onCommand:extension.deployment.delete",
         "onCommand:extension.explorer.refresh",
@@ -48,6 +51,21 @@
             {
                 "command": "extension.authentication.verify",
                 "title": "Verify",
+                "category": "Now"
+            },
+            {
+                "command": "extension.deployment.logs",
+                "title": "Show logs",
+                "category": "Now"
+            },
+            {
+                "command": "extension.deployment.open",
+                "title": "Open in browser",
+                "category": "Now"
+            },
+            {
+                "command": "extension.deployment.setAlias",
+                "title": "Set an alias",
                 "category": "Now"
             },
             {
@@ -85,6 +103,18 @@
                 }
             ],
             "view/item/context": [
+                {
+                    "command": "extension.deployment.logs",
+                    "when": "view == nowExplorer && viewItem == deploymentNode"
+                },
+                {
+                    "command": "extension.deployment.open",
+                    "when": "view == nowExplorer && viewItem == deploymentNode"
+                },
+                {
+                    "command": "extension.deployment.setAlias",
+                    "when": "view == nowExplorer && viewItem == deploymentNode"
+                },
                 {
                     "command": "extension.deployment.delete",
                     "when": "view == nowExplorer && viewItem == deploymentNode"

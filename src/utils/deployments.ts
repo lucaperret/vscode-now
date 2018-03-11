@@ -40,3 +40,7 @@ export async function getDeployments(): Promise<Deployment[]> {
     return response.deployments;
 }
 
+export async function setAlias(deployment: Deployment, alias: string): Promise<Deployment[]> {
+    const response = await request('POST', config.ENDPOINTS.DEPLOYMENTS + `/${deployment.uid}/aliases`, true, { alias: alias + '.now.sh' });
+    return response;
+}
