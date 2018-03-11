@@ -1,7 +1,6 @@
 
-import * as request from 'request-promise-native';
-import { getAuthenticationToken } from './authentication';
 import config from '../config';
+import { request } from './common';
 
 export enum StateType {
     DEPLOYING, DEPLOYMENT_ERROR, BOOTED, BUILDING, READY, BUILD_ERROR, FROZEN
@@ -31,22 +30,12 @@ export async function deploy () {
 
 }
 
-export async function getDeployments(): Promise<Deployment[]> {
-    let response: any;
-    
-    const options = {
-        uri: config.URL + config.ENDPOINTS.DEPLOYMENTS,
-        headers: {
-            Authorization: 'Bearer ' + await getAuthenticationToken()
-        },
-        json: true
-    };
-    
-    try {
-        response = await request(options);
-    } catch (e) {
-        throw new Error(e.error.error.message);
-    }
+export async function deleteDeployment(id: Deployment['uid']): Promise<Deployment[]> {
+    const response = await request('DELETE', config.ENDPOINTS.DEPLOYMENTS + '/' + id, true);
+    return response;
+}
 
+export async function getDeployments(): Promise<Deployment[]> {
+    const response = await request('GET', config.ENDPOINTS.DEPLOYMENTS, true);
     return response.deployments;
 }

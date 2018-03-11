@@ -1,6 +1,6 @@
 {
     "name": "vscode-now",
-    "displayName": "vscode-now",
+    "displayName": "Now",
     "description": "Manage your deployments within vscode",
     "version": "0.0.1",
     "publisher": "lucaperret",
@@ -13,8 +13,12 @@
         "Other"
     ],
     "activationEvents": [
+        "onCommand:extension.authentication.setToken",
         "onCommand:extension.authentication.login",
-        "onCommand:extension.deploy",
+        "onCommand:extension.authentication.verify",
+        "onCommand:extension.deployment.deploy",
+        "onCommand:extension.deployment.delete",
+        "onCommand:extension.explorer.refresh",
         "onView:nowExplorer"
     ],
     "main": "./out/extension",
@@ -47,9 +51,19 @@
                 "category": "Now"
             },
             {
-                "command": "extension.deploy",
+                "command": "extension.deployment.deploy",
                 "title": "Deploy",
                 "description": "Deploy current directory",
+                "category": "Now"
+            },
+            {
+                "command": "extension.deployment.delete",
+                "title": "Delete",
+                "category": "Now"
+            },
+            {
+                "command": "extension.explorer.refresh",
+                "title": "Refresh",
                 "category": "Now"
             }
         ],
@@ -59,6 +73,21 @@
                     "id": "nowExplorer",
                     "name": "Now",
                     "when": "config.now.showExplorer == true"
+                }
+            ]
+        },
+        "menus": {
+            "view/title": [
+                {
+                    "command": "extension.explorer.refresh",
+                    "when": "view == nowExplorer",
+                    "group": "navigation"
+                }
+            ],
+            "view/item/context": [
+                {
+                    "command": "extension.deployment.delete",
+                    "when": "view == nowExplorer && viewItem == deploymentNode"
                 }
             ]
         }

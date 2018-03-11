@@ -32,7 +32,7 @@ export class DeploymentNode extends NodeBase {
 
     getTreeItem(): vscode.TreeItem {
         return {
-            label: `${this.label} (${moment(new Date(Number(this.data.created))).fromNow()})`,
+            label: `${this.label} (${moment(new Date(Number(this.data.created))).fromNow()}) - ${this.data.state}`,
             collapsibleState: vscode.TreeItemCollapsibleState.None,
             contextValue: 'deploymentNode'
         };
