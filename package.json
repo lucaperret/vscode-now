@@ -24,13 +24,18 @@
             "title": "Now configuration options",
             "properties": {
                 "now.showExplorer": {
-                "type": "boolean",
-                "default": true,
-                "description": "Show or hide the Explorer."
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show or hide the Explorer."
                 }
             }
         },
         "commands": [
+            {
+                "command": "extension.authentication.setToken",
+                "title": "Set token",
+                "category": "Now"
+            },
             {
                 "command": "extension.authentication.login",
                 "title": "Login",
@@ -66,6 +71,7 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
+        "@types/keytar": "^4.0.1",
         "@types/mocha": "^2.2.42",
         "@types/node": "^7.0.43",
         "@types/request-promise-native": "^1.0.14",

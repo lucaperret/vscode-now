@@ -1,5 +1,6 @@
 
 import * as request from 'request-promise-native';
+import { getAuthenticationToken } from './authentication';
 import config from '../config';
 
 export enum StateType {
@@ -32,11 +33,15 @@ export async function deploy () {
 
 export async function getDeployments(): Promise<Deployment[]> {
     let response: any;
+    
     const options = {
         uri: config.URL + config.ENDPOINTS.DEPLOYMENTS,
+        headers: {
+            Authorization: 'Bearer ' + await getAuthenticationToken()
+        },
         json: true
     };
-
+    
     try {
         response = await request(options);
     } catch (e) {

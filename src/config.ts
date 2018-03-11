@@ -4,9 +4,6 @@ export default {
     CONTENT_TYPE: {
         'Content-Type': 'application/json'
     },
-    AUTHORIZATION: {
-        Authorization: 'Bearer'
-    },
     ENDPOINTS: {
         REGISTRATION: '/now/registration',
         VERIFY: '/now/registration/verify',

@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
-import { getDeployments } from '../utils/deployments';
+import { NodeBase, RootNode } from './models';
+import { getAuthenticationToken } from '../utils/authentication';
 
 export class NowExplorerProvider implements vscode.TreeDataProvider<NodeBase> {
 
@@ -7,15 +8,8 @@ export class NowExplorerProvider implements vscode.TreeDataProvider<NodeBase> {
     readonly onDidChangeTreeData: vscode.Event<NodeBase> = this._onDidChangeTreeData.event;
     private _deploymentsNode: RootNode = new RootNode('Deployments', 'deploymentsRootNode', this._onDidChangeTreeData);
 
-    constructor() {
-    }
-
     refresh(): void {
-        this._onDidChangeTreeData.fire(this._deploymentsNode);
-    }
-
-    refreshDeployments(): void {
-        this._onDidChangeTreeData.fire(this._deploymentsNode);
+        this._onDidChangeTreeData.fire();
     }
     
     getTreeItem(element: NodeBase): vscode.TreeItem {
@@ -31,61 +25,15 @@ export class NowExplorerProvider implements vscode.TreeDataProvider<NodeBase> {
 
     private async getRootNodes(): Promise<RootNode[]> {
         const rootNodes: RootNode[] = [];
+        
+        let token = await getAuthenticationToken();
+        if (!token) {
+            return rootNodes;
+        }
 
         rootNodes.push(this._deploymentsNode);
 
         return rootNodes;
     }
 
-}
-
-
-class NodeBase {
-    readonly label: string;
-
-    protected constructor(label: string) {
-        this.label = label;
-    }
-
-    getTreeItem(): vscode.TreeItem {
-        return {
-            label: this.label,
-            collapsibleState: vscode.TreeItemCollapsibleState.None
-        };
-    }
-
-    async getChildren(element: NodeBase): Promise<NodeBase[]> {
-        return [];
-    }
-}
-
-class RootNode extends NodeBase {
-
-    constructor(
-        public readonly label: string,
-        public readonly contextValue: string,
-        public eventEmitter: vscode.EventEmitter<NodeBase>
-    ) {
-        super(label);
-    }
-
-    getTreeItem(): vscode.TreeItem {
-        return {
-            label: this.label,
-            collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
-            contextValue: this.contextValue
-        };
-    }
-
-    async getChildren(element: RootNode): Promise<NodeBase[]> {
-        if (element.contextValue === 'deploymentsRootNode') {
-            return this.getDeployments();
-        }
-        return [];
-    }
-
-    private async getDeployments(): Promise<NodeBase[]> {
-        const deployments = await getDeployments();
-        return deployments.map(deployment => new NodeBase(deployment.name));
-    }
 }

@@ -1,24 +1,12 @@
-
 import * as vscode from 'vscode';
-import * as request from 'request-promise-native';
-import config from '../config';
+import { setAuthenticationToken, requestLogin, verifyLogin, Registration } from '../utils/authentication';
 
-export interface Registration {
-    token: string;
-    securityCode: string;
+export function logout(): void {
+    setAuthenticationToken(null);
+    vscode.window.showInformationMessage('You have been correctly logout to Now.');
 }
 
-let _authenticationToken = null;
-
-export function nowLogout(): void {
-
-    _authenticationToken = null;
-
-}
-
-export async function promptLogin(): Promise<string | Error | undefined> {
-    
-    // To sign up or log in, fill in your email address below:
+export async function login(): Promise<string | Error | undefined> {
     const email = await vscode.window.showInputBox({ ignoreFocusOut: true, prompt: 'Email' });
     if (email) {
         const tokenName = await vscode.window.showInputBox({ ignoreFocusOut: true, prompt: 'Token name' });
@@ -28,7 +16,8 @@ export async function promptLogin(): Promise<string | Error | undefined> {
                 await vscode.window.showInformationMessage(`We sent an email to ${email},\n\nVerify that the provided security code matches the following text: ${registration.securityCode}.\n\nClick OK when you have verified your email...`, { modal: true });
                 const authenticationToken = await verifyLogin(email, registration.token);
                 setAuthenticationToken(authenticationToken);
-                return vscode.window.showInformationMessage('You have been correctly authenticated to Now.');
+                vscode.window.showInformationMessage('You have been correctly authenticated to Now.');
+                return Promise.resolve(authenticationToken);
             }
         } else {
             throw new Error('Token name is required');
@@ -38,51 +27,15 @@ export async function promptLogin(): Promise<string | Error | undefined> {
     }
 
     return Promise.reject(new Error('An error has occurred'));
-
 }
 
-export function setAuthenticationToken(token: string) {
-    _authenticationToken = token;
-}
-
-async function requestLogin(email: string, tokenName: string): Promise<Registration> {
-
-    let response: any;
-    const options = {
-        method: 'POST',
-        uri: config.URL + config.ENDPOINTS.REGISTRATION,
-        body: { email, tokenName },
-        json: true
-    };
-
-    try {
-        response = await request(options);
-    } catch (e) {
-        throw new Error(e.error.error.message);
+export async function setToken(): Promise<string | Error | undefined> {
+    const token = await vscode.window.showInputBox({ ignoreFocusOut: true, password: true, prompt: 'Token' });
+    if (token) {
+        setAuthenticationToken(token);
+        vscode.window.showInformationMessage('You have been correctly authenticated to Now.');
+        return Promise.resolve(token);
     }
 
-    return response;
-
-}
-
-async function verifyLogin(email: string, token: string): Promise<string> {
-
-    let response: any;
-    const options = {
-        uri: config.URL + config.ENDPOINTS.VERIFY,
-        qs: {
-            email,
-            token
-        },
-        json: true
-    };
-
-    try {
-        response = (await request(options)).token;
-    } catch (e) {
-        throw new Error(e.error.error.message);
-    }
-
-    return response;
-
+    return Promise.reject(new Error('An error has occurred'));
 }
