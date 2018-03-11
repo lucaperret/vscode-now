@@ -27,7 +27,7 @@ export class DeploymentNode extends NodeBase {
         public readonly data: Deployment,
         public readonly eventEmitter: vscode.EventEmitter<NodeBase>
     ) {
-        super(data.name);
+        super(data.url);
     }
 
     getTreeItem(): vscode.TreeItem {
@@ -36,6 +36,30 @@ export class DeploymentNode extends NodeBase {
             collapsibleState: vscode.TreeItemCollapsibleState.None,
             contextValue: 'deploymentNode'
         };
+    }
+
+}
+
+export class DeploymentNameNode extends NodeBase {
+
+    constructor(
+        public readonly label: string,
+        public readonly deployments: Deployment[],
+        public readonly eventEmitter: vscode.EventEmitter<NodeBase>
+    ) {
+        super(label);
+    }
+
+    getTreeItem(): vscode.TreeItem {
+        return {
+            label: this.label,
+            collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
+            contextValue: 'applicationNode'
+        };
+    }
+
+    async getChildren(element: RootNode): Promise<DeploymentNode[]> {
+        return this.deployments.map(deployment => new DeploymentNode(deployment, this.eventEmitter));
     }
 
 }
@@ -58,15 +82,24 @@ export class RootNode extends NodeBase {
         };
     }
 
-    async getChildren(element: RootNode): Promise<NodeBase[]> {
+    async getChildren(element: RootNode): Promise<DeploymentNameNode[]> {
         if (element.contextValue === 'deploymentsRootNode') {
             return this.getDeployments();
         }
         return [];
     }
 
-    private async getDeployments(): Promise<NodeBase[]> {
+    private async getDeployments(): Promise<DeploymentNameNode[]> {
         const deployments = await getDeployments();
-        return deployments.map(deployment => new DeploymentNode(deployment, this.eventEmitter));
+        const applications = new Map();
+        for (const deployment of deployments) {
+            if (applications.has(deployment.name)) {
+                applications.get(deployment.name).push(deployment);
+            } else {
+                applications.set(deployment.name, [deployment]);
+            }
+        }
+        return Array.from(applications).map(([name, deployments]) => new DeploymentNameNode(name, deployments, this.eventEmitter));
     }
+
 }

@@ -13,7 +13,7 @@ export enum TypeType {
 export interface Deployment {
     uid: string;
     name: string;
-    url: string | null;
+    url: string;
     created: string;
     state: StateType;
     type: TypeType;
@@ -39,3 +39,4 @@ export async function getDeployments(): Promise<Deployment[]> {
     const response = await request('GET', config.ENDPOINTS.DEPLOYMENTS, true);
     return response.deployments;
 }
+
