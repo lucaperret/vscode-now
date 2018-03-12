@@ -26,7 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('extension.deployment.setAlias', setAlias));
     context.subscriptions.push(vscode.commands.registerCommand('extension.deployment.deploy', deploy));
     context.subscriptions.push(vscode.commands.registerCommand('extension.deployment.delete', async deploymentNode => {
-        await deleteDeployment(deploymentNode.data.uid);
+        await deleteDeployment(deploymentNode);
         nowExplorer.refresh();
     }));
 

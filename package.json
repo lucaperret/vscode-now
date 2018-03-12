@@ -10,13 +10,14 @@
         "vscode": "^1.21.0"
     },
     "categories": [
+        "Snippets",
         "Other"
     ],
     "activationEvents": [
         "onCommand:extension.authentication.setToken",
         "onCommand:extension.authentication.login",
         "onCommand:extension.authentication.verify",
-        "onCommand:extension.deployment.logs",
+        "onCommand:extension.deployment.showLogs",
         "onCommand:extension.deployment.open",
         "onCommand:extension.deployment.setAlias",
         "onCommand:extension.deployment.deploy",
@@ -54,7 +55,7 @@
                 "category": "Now"
             },
             {
-                "command": "extension.deployment.logs",
+                "command": "extension.deployment.showLogs",
                 "title": "Show logs",
                 "category": "Now"
             },
@@ -104,7 +105,7 @@
             ],
             "view/item/context": [
                 {
-                    "command": "extension.deployment.logs",
+                    "command": "extension.deployment.showLogs",
                     "when": "view == nowExplorer && viewItem == deploymentNode"
                 },
                 {
