@@ -19,7 +19,8 @@
         "onCommand:extension.authentication.verify",
         "onCommand:extension.deployment.showLogs",
         "onCommand:extension.deployment.open",
-        "onCommand:extension.deployment.setAlias",
+        "onCommand:extension.deployment.setCustomAlias",
+        "onCommand:extension.deployment.setExistingAlias",
         "onCommand:extension.deployment.deploy",
         "onCommand:extension.deployment.delete",
         "onCommand:extension.explorer.refresh",
@@ -65,8 +66,13 @@
                 "category": "Now"
             },
             {
-                "command": "extension.deployment.setAlias",
-                "title": "Set an alias",
+                "command": "extension.deployment.setCustomAlias",
+                "title": "Set a custom alias",
+                "category": "Now"
+            },
+            {
+                "command": "extension.deployment.setExistingAlias",
+                "title": "Set an existing alias...",
                 "category": "Now"
             },
             {
@@ -113,7 +119,11 @@
                     "when": "view == nowExplorer && viewItem == deploymentNode"
                 },
                 {
-                    "command": "extension.deployment.setAlias",
+                    "command": "extension.deployment.setCustomAlias",
+                    "when": "view == nowExplorer && viewItem == deploymentNode"
+                },
+                {
+                    "command": "extension.deployment.setExistingAlias",
                     "when": "view == nowExplorer && viewItem == deploymentNode"
                 },
                 {

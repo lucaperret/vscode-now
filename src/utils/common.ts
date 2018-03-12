@@ -26,13 +26,13 @@ export async function request (method: string, endpoint: string, hasAuthenticati
 		body,
 		qs,
         json: true
-	};
-	
+    };
+    
     try {
         response = await requestNative(options);
     } catch (e) {
         throw new Error(e.error.error.message);
     }
-
+    
     return response;
 }

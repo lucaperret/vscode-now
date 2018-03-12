@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { deleteDeployment as remove, setAlias as alias } from '../utils/deployments';
 import { DeploymentNode } from '../explorer/models';
+import { getAliasNames } from '../utils/aliases';
 
 export async function deploy () {
 
@@ -8,8 +9,12 @@ export async function deploy () {
 
 export async function deleteDeployment (deploymentNode?: DeploymentNode) {
     if (deploymentNode) {
-        await remove(deploymentNode.data.uid);
-        vscode.window.showInformationMessage('Deployment successfuly deleted');
+        try {
+            await remove(deploymentNode.data.uid);
+            vscode.window.showInformationMessage('Deployment successfuly deleted');
+        } catch (error) {
+            vscode.window.showErrorMessage('Delete deployment error: ' + error.message);
+        }
     } else {
         vscode.window.showInformationMessage('Right-click on a deployment in the explorer to delete it');
     }
@@ -31,12 +36,32 @@ export function showLogs (deploymentNode?: DeploymentNode) {
     }
 }
 
-export async function setAlias (deploymentNode?: DeploymentNode) {
+export async function setCustomAlias (deploymentNode?: DeploymentNode) {
     if (deploymentNode) {
-        const deploymentAlias = await vscode.window.showInputBox({ ignoreFocusOut: true, prompt: 'Alias' });
+        const deploymentAlias = await vscode.window.showInputBox({ ignoreFocusOut: true, prompt: 'Alias (my-alias.now.sh or my-domain.tld)' });
         if (deploymentAlias) {
-            await alias(deploymentNode.data, deploymentAlias);
-            vscode.window.showInformationMessage(`Alias ${deploymentAlias}.now.sh successfuly set to the deployment ${deploymentNode.data.uid}.`);
+            try {
+                await alias(deploymentNode.data, deploymentAlias);
+                vscode.window.showInformationMessage(`Alias ${deploymentAlias}.now.sh successfuly set to the deployment ${deploymentNode.data.url}.`);
+            } catch (error) {
+                vscode.window.showErrorMessage('Set custom alias error: ' + error.message);
+            }
+        }
+    } else {
+        vscode.window.showInformationMessage('Right-click on a deployment in the explorer to set an alias');
+    }
+}
+
+export async function setExistingAlias (deploymentNode?: DeploymentNode) {
+    if (deploymentNode) {
+        const selectedAlias = await vscode.window.showQuickPick(getAliasNames(), { placeHolder: 'Choose an existing alias...' });
+        if (selectedAlias) {
+            try {
+                await alias(deploymentNode.data, selectedAlias.label);
+                vscode.window.showInformationMessage(`Alias ${selectedAlias.label} successfuly set to the deployment ${deploymentNode.data.url}.`);
+            } catch (error) {
+                vscode.window.showErrorMessage('Set existing alias error: ' + error.message);
+            }
         }
     } else {
         vscode.window.showInformationMessage('Right-click on a deployment in the explorer to set an alias');

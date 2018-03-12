@@ -1,5 +1,6 @@
 import config from '../config';
 import { request } from './common';
+import { NewAlias, AliasForExistingDeployment } from './aliases';
 
 export enum StateType {
     DEPLOYING = 'DEPLOYING',
@@ -17,6 +18,10 @@ enum TypeType {
     STATIC = 'STATIC'
 }
 
+interface Creator {
+    uid: string;
+}
+
 export interface Deployment {
     uid: string;
     name: string;
@@ -25,6 +30,7 @@ export interface Deployment {
     state: StateType;
     type: TypeType;
     scale: Scale | undefined;
+    creator: Creator;
 }
 
 interface Scale {
@@ -37,17 +43,15 @@ export async function deploy () {
 
 }
 
-export async function deleteDeployment(id: Deployment['uid']): Promise<Deployment[]> {
-    const response = await request('DELETE', config.ENDPOINTS.DEPLOYMENTS + '/' + id, true);
-    return response;
+export async function deleteDeployment (id: Deployment['uid']): Promise<void> {
+    await request('DELETE', config.ENDPOINTS.DEPLOYMENTS + '/' + id, true);
 }
 
-export async function getDeployments(): Promise<Deployment[]> {
+export async function getDeployments (): Promise<Deployment[]> {
     const response = await request('GET', config.ENDPOINTS.DEPLOYMENTS, true);
     return response.deployments;
 }
 
-export async function setAlias(deployment: Deployment, alias: string): Promise<Deployment[]> {
-    const response = await request('POST', config.ENDPOINTS.DEPLOYMENTS + `/${deployment.uid}/aliases`, true, { alias: alias + '.now.sh' });
-    return response;
+export async function setAlias (deployment: Deployment, alias: string): Promise<NewAlias | AliasForExistingDeployment> {
+    return await request('POST', config.ENDPOINTS.DEPLOYMENTS + `/${deployment.uid}/aliases`, true, { alias });
 }

@@ -7,6 +7,7 @@ export default {
     ENDPOINTS: {
         REGISTRATION: '/now/registration',
         VERIFY: '/now/registration/verify',
-        DEPLOYMENTS: '/v2/now/deployments'
+        DEPLOYMENTS: '/v2/now/deployments',
+        ALIASES: '/v2/now/aliases'
     }
 };
