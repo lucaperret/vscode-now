@@ -11,13 +11,15 @@ export async function login (): Promise<string | Error | undefined> {
     if (email) {
         const tokenName = await vscode.window.showInputBox({ ignoreFocusOut: true, prompt: 'Token name' });
         if (tokenName) {
-            const registration: Registration = await requestLogin(email, tokenName);
-            if (registration) {
+            try {
+                const registration: Registration = await requestLogin(email, tokenName);
                 await vscode.window.showInformationMessage(`We sent an email to ${email},\n\nVerify that the provided security code matches the following text: ${registration.securityCode}.\n\nClick OK when you have verified your email...`, { modal: true });
                 const authenticationToken = await verifyLogin(email, registration.token);
                 setAuthenticationToken(authenticationToken);
                 vscode.window.showInformationMessage('You have been correctly authenticated to Now.');
                 return Promise.resolve(authenticationToken);
+            } catch (error) {
+                vscode.window.showErrorMessage('Login error: ' + error.message);
             }
         } else {
             throw new Error('Token name is required');

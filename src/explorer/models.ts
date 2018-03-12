@@ -104,16 +104,21 @@ export class RootNode extends NodeBase {
 
     private async getDeployments (): Promise<DeploymentNameNode[]> {
         return vscode.window.withProgress({ location: vscode.ProgressLocation.Window, title: 'Loading deployments' }, async (progress) => {
-            const deployments: Deployment[] = await getDeployments();
-            const applications = new Map();
-            for (const deployment of deployments) {
-                if (applications.has(deployment.name)) {
-                    applications.get(deployment.name).push(deployment);
-                } else {
-                    applications.set(deployment.name, [deployment]);
+            try {
+                const deployments: Deployment[] = await getDeployments();
+                const applications = new Map();
+                for (const deployment of deployments) {
+                    if (applications.has(deployment.name)) {
+                        applications.get(deployment.name).push(deployment);
+                    } else {
+                        applications.set(deployment.name, [deployment]);
+                    }
                 }
+                return Array.from(applications).map(([name, deployments]) => new DeploymentNameNode(name, deployments, this.eventEmitter));
+            } catch (error) {
+                vscode.window.showErrorMessage('Get deployments error: ' + error.message);
+                return [];
             }
-            return Array.from(applications).map(([name, deployments]) => new DeploymentNameNode(name, deployments, this.eventEmitter));
         });
     }
 
