@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
+import * as path from 'path';
 import * as moment from 'moment';
-import { getDeployments, Deployment } from '../utils/deployments';
+import { getDeployments, Deployment, StateType } from '../utils/deployments';
 
 export class NodeBase {
     readonly label: string;
@@ -31,10 +32,22 @@ export class DeploymentNode extends NodeBase {
     }
 
     getTreeItem(): vscode.TreeItem {
+        let icon;
+        if (this.data.state === StateType.READY) {
+            icon = 'runningDeployment';
+        } else if (~[StateType.BOOTED, StateType.BUILDING, StateType.DEPLOYING].indexOf(this.data.state)) {
+            icon = 'deployment';
+        } else {
+            icon = 'errorDeployment';
+        }
         return {
             label: `${this.label} (${moment(new Date(Number(this.data.created))).fromNow()}) - ${this.data.state}`,
             collapsibleState: vscode.TreeItemCollapsibleState.None,
-            contextValue: 'deploymentNode'
+            contextValue: 'deploymentNode',
+            iconPath: {
+                light: path.join(__filename, '..', '..', '..', 'resources', 'light', icon + '.svg'),
+                dark: path.join(__filename, '..', '..', '..', 'resources', 'dark', icon + '.svg')
+            }
         };
     }
 
@@ -90,7 +103,7 @@ export class RootNode extends NodeBase {
     }
 
     private async getDeployments(): Promise<DeploymentNameNode[]> {
-        const deployments = await getDeployments();
+        const deployments: Deployment[] = await getDeployments();
         const applications = new Map();
         for (const deployment of deployments) {
             if (applications.has(deployment.name)) {

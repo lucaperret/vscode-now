@@ -3,11 +3,19 @@ import config from '../config';
 import { request } from './common';
 
 export enum StateType {
-    DEPLOYING, DEPLOYMENT_ERROR, BOOTED, BUILDING, READY, BUILD_ERROR, FROZEN
+    DEPLOYING = 'DEPLOYING',
+    DEPLOYMENT_ERROR = 'DEPLOYMENT_ERROR',
+    BOOTED = 'BOOTED',
+    BUILDING = 'BUILDING',
+    READY = 'READY',
+    BUILD_ERROR = 'BUILD_ERROR',
+    FROZEN = 'FROZEN'
 }
 
 export enum TypeType {
-    NPM, DOCKER, STATIC
+    NPM = 'NPM',
+    DOCKER = 'DOCKER',
+    STATIC = 'STATIC'
 }
 
 export interface Deployment {
@@ -17,7 +25,7 @@ export interface Deployment {
     created: string;
     state: StateType;
     type: TypeType;
-    scale: Scale;
+    scale: Scale | undefined;
 }
 
 export interface Scale {
