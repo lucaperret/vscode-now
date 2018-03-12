@@ -6,32 +6,32 @@ import { getDeployments, Deployment, StateType } from '../utils/deployments';
 export class NodeBase {
     readonly label: string;
 
-    protected constructor(label: string) {
+    protected constructor (label: string) {
         this.label = label;
     }
 
-    getTreeItem(): vscode.TreeItem {
+    getTreeItem (): vscode.TreeItem {
         return {
             label: this.label,
             collapsibleState: vscode.TreeItemCollapsibleState.None
         };
     }
 
-    async getChildren(element: NodeBase): Promise<NodeBase[]> {
+    async getChildren (element: NodeBase): Promise<NodeBase[]> {
         return [];
     }
 }
 
 export class DeploymentNode extends NodeBase {
 
-    constructor(
+    constructor (
         public readonly data: Deployment,
         public readonly eventEmitter: vscode.EventEmitter<NodeBase>
     ) {
         super(data.url);
     }
 
-    getTreeItem(): vscode.TreeItem {
+    getTreeItem (): vscode.TreeItem {
         let icon;
         if (this.data.state === StateType.READY) {
             icon = 'runningDeployment';
@@ -55,7 +55,7 @@ export class DeploymentNode extends NodeBase {
 
 export class DeploymentNameNode extends NodeBase {
 
-    constructor(
+    constructor (
         public readonly label: string,
         public readonly deployments: Deployment[],
         public readonly eventEmitter: vscode.EventEmitter<NodeBase>
@@ -63,7 +63,7 @@ export class DeploymentNameNode extends NodeBase {
         super(label);
     }
 
-    getTreeItem(): vscode.TreeItem {
+    getTreeItem (): vscode.TreeItem {
         return {
             label: this.label,
             collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
@@ -71,7 +71,7 @@ export class DeploymentNameNode extends NodeBase {
         };
     }
 
-    async getChildren(element: RootNode): Promise<DeploymentNode[]> {
+    async getChildren (element: RootNode): Promise<DeploymentNode[]> {
         return this.deployments.map(deployment => new DeploymentNode(deployment, this.eventEmitter));
     }
 
@@ -79,7 +79,7 @@ export class DeploymentNameNode extends NodeBase {
 
 export class RootNode extends NodeBase {
 
-    constructor(
+    constructor (
         public readonly label: string,
         public readonly contextValue: string,
         public eventEmitter: vscode.EventEmitter<NodeBase>
@@ -87,7 +87,7 @@ export class RootNode extends NodeBase {
         super(label);
     }
 
-    getTreeItem(): vscode.TreeItem {
+    getTreeItem (): vscode.TreeItem {
         return {
             label: this.label,
             collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
@@ -95,14 +95,14 @@ export class RootNode extends NodeBase {
         };
     }
 
-    async getChildren(element: RootNode): Promise<DeploymentNameNode[]> {
+    async getChildren (element: RootNode): Promise<DeploymentNameNode[]> {
         if (element.contextValue === 'deploymentsRootNode') {
             return this.getDeployments();
         }
         return [];
     }
 
-    private async getDeployments(): Promise<DeploymentNameNode[]> {
+    private async getDeployments (): Promise<DeploymentNameNode[]> {
         return vscode.window.withProgress({ location: vscode.ProgressLocation.Window, title: 'Loading deployments' }, async (progress) => {
             const deployments: Deployment[] = await getDeployments();
             const applications = new Map();

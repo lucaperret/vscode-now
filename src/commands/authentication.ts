@@ -1,12 +1,12 @@
 import * as vscode from 'vscode';
 import { setAuthenticationToken, requestLogin, verifyLogin, Registration } from '../utils/authentication';
 
-export function logout(): void {
+export function logout (): void {
     setAuthenticationToken(null);
     vscode.window.showInformationMessage('You have been correctly logout to Now.');
 }
 
-export async function login(): Promise<string | Error | undefined> {
+export async function login (): Promise<string | Error | undefined> {
     const email = await vscode.window.showInputBox({ ignoreFocusOut: true, prompt: 'Email' });
     if (email) {
         const tokenName = await vscode.window.showInputBox({ ignoreFocusOut: true, prompt: 'Token name' });
@@ -29,7 +29,7 @@ export async function login(): Promise<string | Error | undefined> {
     return Promise.reject(new Error('An error has occurred'));
 }
 
-export async function setToken(): Promise<string | Error | undefined> {
+export async function setToken (): Promise<string | Error | undefined> {
     const token = await vscode.window.showInputBox({ ignoreFocusOut: true, password: true, prompt: 'Token' });
     if (token) {
         setAuthenticationToken(token);

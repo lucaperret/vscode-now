@@ -3,7 +3,7 @@ import * as requestNative from 'request-promise-native';
 import { getAuthenticationToken } from './authentication';
 import config from '../config';
 
-export function getNodeModule<T>(moduleName: string): T | undefined {
+export function getNodeModule<T> (moduleName: string): T | undefined {
 	try {
 		return require(`${vscode.env.appRoot}/node_modules.asar/${moduleName}`);
 	} catch (err) {}

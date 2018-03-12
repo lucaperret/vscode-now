@@ -8,22 +8,22 @@ export class NowExplorerProvider implements vscode.TreeDataProvider<NodeBase> {
     readonly onDidChangeTreeData: vscode.Event<NodeBase> = this._onDidChangeTreeData.event;
     private _deploymentsNode: RootNode = new RootNode('Deployments', 'deploymentsRootNode', this._onDidChangeTreeData);
 
-    refresh(): void {
+    refresh (): void {
         this._onDidChangeTreeData.fire();
     }
     
-    getTreeItem(element: NodeBase): vscode.TreeItem {
+    getTreeItem (element: NodeBase): vscode.TreeItem {
         return element.getTreeItem();
     }
 
-    async getChildren(element?: NodeBase): Promise<NodeBase[]> {
+    async getChildren (element?: NodeBase): Promise<NodeBase[]> {
         if (!element) {
             return this.getRootNodes();
         }
         return element.getChildren(element);
     }
 
-    private async getRootNodes(): Promise<RootNode[]> {
+    private async getRootNodes (): Promise<RootNode[]> {
         const rootNodes: RootNode[] = [];
         
         let token = await getAuthenticationToken();

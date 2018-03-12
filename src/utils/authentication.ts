@@ -10,7 +10,7 @@ export interface Registration {
     securityCode: string;
 }
 
-export function setAuthenticationToken(token: string | null): void {
+export function setAuthenticationToken (token: string | null): void {
     _authenticationToken = token;
     if (keytar) {
         if (token) {
@@ -21,7 +21,7 @@ export function setAuthenticationToken(token: string | null): void {
     }
 }
 
-export async function getAuthenticationToken() {
+export async function getAuthenticationToken () {
     let token;
     if (keytar) {
         token = await keytar.getPassword('vscode-now', 'now.token');
@@ -32,12 +32,12 @@ export async function getAuthenticationToken() {
     return _authenticationToken;
 }
 
-export async function requestLogin(email: string, tokenName: string): Promise<Registration> {
+export async function requestLogin (email: string, tokenName: string): Promise<Registration> {
     const response = await request('POST', config.ENDPOINTS.REGISTRATION, false, { email, tokenName });
     return response;
 }
 
-export async function verifyLogin(email: string, token: string): Promise<string> {
+export async function verifyLogin (email: string, token: string): Promise<string> {
     const response = await request('GET', config.ENDPOINTS.VERIFY, false, null, { email, token });
     return response.token;
 }
