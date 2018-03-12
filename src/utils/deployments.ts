@@ -1,4 +1,3 @@
-
 import config from '../config';
 import { request } from './common';
 
@@ -12,7 +11,7 @@ export enum StateType {
     FROZEN = 'FROZEN'
 }
 
-export enum TypeType {
+enum TypeType {
     NPM = 'NPM',
     DOCKER = 'DOCKER',
     STATIC = 'STATIC'
@@ -28,7 +27,7 @@ export interface Deployment {
     scale: Scale | undefined;
 }
 
-export interface Scale {
+interface Scale {
     current: number;
     min: number;
     max: number;
