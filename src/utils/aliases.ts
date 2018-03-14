@@ -46,3 +46,7 @@ export async function getAliasNames (): Promise<vscode.QuickPickItem[]> {
         description: 'Alias created ' + moment(alias.created).fromNow()
     } as vscode.QuickPickItem));
 }
+
+export async function deleteAlias (id: Alias['uid']): Promise<void> {
+    await request('DELETE', config.ENDPOINTS.ALIASES + '/' + id, true);
+}

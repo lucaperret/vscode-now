@@ -7,6 +7,7 @@ export class NowExplorerProvider implements vscode.TreeDataProvider<NodeBase> {
     private _onDidChangeTreeData: vscode.EventEmitter<NodeBase> = new vscode.EventEmitter<NodeBase>();
     readonly onDidChangeTreeData: vscode.Event<NodeBase> = this._onDidChangeTreeData.event;
     private _deploymentsNode: RootNode = new RootNode('Deployments', 'deploymentsRootNode', this._onDidChangeTreeData);
+    private _aliasesNode: RootNode = new RootNode('Aliases', 'aliasesRootNode', this._onDidChangeTreeData);
 
     refresh (): void {
         this._onDidChangeTreeData.fire();
@@ -32,6 +33,7 @@ export class NowExplorerProvider implements vscode.TreeDataProvider<NodeBase> {
         }
 
         rootNodes.push(this._deploymentsNode);
+        rootNodes.push(this._aliasesNode);
 
         return rootNodes;
     }

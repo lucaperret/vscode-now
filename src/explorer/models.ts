@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as moment from 'moment';
 import { getDeployments, Deployment, StateType } from '../utils/deployments';
+import { getAliases, Alias } from '../utils/aliases';
 
 export class NodeBase {
     readonly label: string;
@@ -20,6 +21,25 @@ export class NodeBase {
     async getChildren (element: NodeBase): Promise<NodeBase[]> {
         return [];
     }
+}
+
+export class AliasNode extends NodeBase {
+
+    constructor (
+        public readonly data: Alias,
+        public readonly eventEmitter: vscode.EventEmitter<NodeBase>
+    ) {
+        super(data.alias);
+    }
+
+    getTreeItem (): vscode.TreeItem {
+        return {
+            label: `${this.label} (${moment(new Date(this.data.created)).fromNow()})`,
+            collapsibleState: vscode.TreeItemCollapsibleState.None,
+            contextValue: 'aliasNode'
+        };
+    }
+
 }
 
 export class DeploymentNode extends NodeBase {
@@ -95,15 +115,17 @@ export class RootNode extends NodeBase {
         };
     }
 
-    async getChildren (element: RootNode): Promise<DeploymentNameNode[]> {
+    async getChildren (element: RootNode): Promise<NodeBase[]> {
         if (element.contextValue === 'deploymentsRootNode') {
             return this.getDeployments();
+        } else if (element.contextValue === 'aliasesRootNode') {
+            return this.getAliases();
         }
         return [];
     }
 
     private async getDeployments (): Promise<DeploymentNameNode[]> {
-        return vscode.window.withProgress({ location: vscode.ProgressLocation.Window, title: 'Loading deployments' }, async (progress) => {
+        return vscode.window.withProgress({ location: vscode.ProgressLocation.Window, title: 'Loading deployments' }, async progress => {
             try {
                 const deployments: Deployment[] = await getDeployments();
                 const applications = new Map();
@@ -117,6 +139,18 @@ export class RootNode extends NodeBase {
                 return Array.from(applications).map(([name, deployments]) => new DeploymentNameNode(name, deployments, this.eventEmitter));
             } catch (error) {
                 vscode.window.showErrorMessage('Get deployments error: ' + error.message);
+                return [];
+            }
+        });
+    }
+
+    private async getAliases (): Promise<AliasNode[]> {
+        return vscode.window.withProgress({ location: vscode.ProgressLocation.Window, title: 'Loading aliases' }, async progress => {
+            try {
+                const aliases: Alias[] = await getAliases();
+                return aliases.map(alias => new AliasNode(alias, this.eventEmitter));
+            } catch (error) {
+                vscode.window.showErrorMessage('Get aliases error: ' + error.message);
                 return [];
             }
         });
