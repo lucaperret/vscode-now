@@ -1,10 +1,22 @@
 import * as vscode from 'vscode';
-import { deleteDeployment as remove, setAlias as alias } from '../utils/deployments';
+import * as fs from 'fs';
+import { deploy as deployFolder, deleteDeployment as remove, setAlias as alias } from '../utils/deployments';
 import { DeploymentNode } from '../explorer/models';
 import { getAliasNames } from '../utils/aliases';
 
 export async function deploy () {
-
+    const folder = await vscode.window.showWorkspaceFolderPick({ ignoreFocusOut: true, placeHolder: 'Which folder to deploy ?' });
+    if (folder) {
+        const pathToDeploy = folder.uri.path;
+        try {
+            const result = fs.readdirSync(pathToDeploy);
+            console.log(result);
+            // await deployFolder(pathToDeploy);
+            vscode.window.showInformationMessage('Deployment successfuly deleted');
+        } catch (error) {
+            vscode.window.showErrorMessage('Deployment error: ' + error.message);
+        }
+    }
 }
 
 export async function deleteDeployment (deploymentNode?: DeploymentNode) {

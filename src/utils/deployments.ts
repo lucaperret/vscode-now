@@ -39,8 +39,9 @@ interface Scale {
     max: number;
 }
 
-export async function deploy () {
-
+export async function deploy (folder: string) {
+    const files = [];
+    await request('DELETE', config.ENDPOINTS.NEW_DEPLOYMENT, true);
 }
 
 export async function deleteDeployment (id: Deployment['uid']): Promise<void> {
