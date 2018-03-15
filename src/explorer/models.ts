@@ -36,7 +36,8 @@ export class AliasNode extends NodeBase {
         return {
             label: `${this.label} (${moment(new Date(this.data.created)).fromNow()})`,
             collapsibleState: vscode.TreeItemCollapsibleState.None,
-            contextValue: 'aliasNode'
+            contextValue: 'aliasNode',
+            tooltip: 'Deployment: ' + (this.data.deployment ? this.data.deployment.url : this.data.deploymentId)
         };
     }
 
@@ -61,13 +62,14 @@ export class DeploymentNode extends NodeBase {
             icon = 'errorDeployment';
         }
         return {
-            label: `${this.label} (${moment(new Date(Number(this.data.created))).fromNow()}) - ${this.data.state}`,
+            label: `${this.label} (${moment(new Date(Number(this.data.created))).fromNow()})`,
             collapsibleState: vscode.TreeItemCollapsibleState.None,
             contextValue: 'deploymentNode',
             iconPath: {
                 light: path.join(__filename, '..', '..', '..', 'resources', 'light', icon + '.svg'),
                 dark: path.join(__filename, '..', '..', '..', 'resources', 'dark', icon + '.svg')
-            }
+            },
+            tooltip: this.data.state
         };
     }
 
