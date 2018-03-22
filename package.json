@@ -73,17 +73,17 @@
             },
             {
                 "command": "extension.authentication.verify",
-                "title": "Verify",
+                "title": "Verify login",
                 "category": "Now"
             },
             {
                 "command": "extension.deployment.showLogs",
-                "title": "Show logs",
+                "title": "Open deployment logs",
                 "category": "Now"
             },
             {
                 "command": "extension.deployment.open",
-                "title": "Open in browser",
+                "title": "Open deployment url",
                 "category": "Now"
             },
             {
@@ -104,22 +104,22 @@
             },
             {
                 "command": "extension.deployment.delete",
-                "title": "Delete",
+                "title": "Delete deployment",
                 "category": "Now"
             },
             {
                 "command": "extension.alias.delete",
-                "title": "Delete",
+                "title": "Delete alias",
                 "category": "Now"
             },
             {
                 "command": "extension.alias.open",
-                "title": "Open in browser",
+                "title": "Open alias url",
                 "category": "Now"
             },
             {
                 "command": "extension.explorer.refresh",
-                "title": "Refresh",
+                "title": "Refresh explorer",
                 "category": "Now"
             }
         ],
