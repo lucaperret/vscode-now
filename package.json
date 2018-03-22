@@ -119,8 +119,12 @@
             },
             {
                 "command": "extension.explorer.refresh",
-                "title": "Refresh explorer",
-                "category": "Now"
+                "title": "Refresh Explorer",
+                "category": "Now",
+                "icon": {
+                  "light": "resources/light/refresh.svg",
+                  "dark": "resources/dark/refresh.svg"
+                }
             }
         ],
         "views": {
