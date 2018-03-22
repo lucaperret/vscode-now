@@ -3,7 +3,7 @@ import { setAuthenticationToken, requestLogin, verifyLogin, Registration } from 
 
 export function logout (): void {
     setAuthenticationToken(null);
-    vscode.window.showInformationMessage('You have been correctly logout to Now.');
+    vscode.window.showInformationMessage('You have been correctly logout to ▲ZEIT now.');
 }
 
 export async function login (): Promise<string | Error | undefined> {
@@ -16,7 +16,7 @@ export async function login (): Promise<string | Error | undefined> {
                 await vscode.window.showInformationMessage(`We sent an email to ${email},\n\nVerify that the provided security code matches the following text: ${registration.securityCode}.\n\nClick OK when you have verified your email...`, { modal: true });
                 const authenticationToken = await verifyLogin(email, registration.token);
                 setAuthenticationToken(authenticationToken);
-                vscode.window.showInformationMessage('You have been correctly authenticated to Now.');
+                vscode.window.showInformationMessage('You have been correctly authenticated to ▲ZEIT now.');
                 return Promise.resolve(authenticationToken);
             } catch (error) {
                 vscode.window.showErrorMessage('Login error: ' + error.message);
@@ -35,7 +35,7 @@ export async function setToken (): Promise<string | Error | undefined> {
     const token = await vscode.window.showInputBox({ ignoreFocusOut: true, password: true, prompt: 'Token' });
     if (token) {
         setAuthenticationToken(token);
-        vscode.window.showInformationMessage('You have been correctly authenticated to Now.');
+        vscode.window.showInformationMessage('You have been correctly authenticated to ▲ZEIT now.');
         return Promise.resolve(token);
     }
 
