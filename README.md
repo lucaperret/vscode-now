@@ -1,65 +1,49 @@
-# vscode-now README
+# ▲ZEIT now for Visual Studio Code
 
-This is the README for your extension "vscode-now". After writing up a brief description, we recommend including the following sections.
+The Now extension makes it easy to create and manage [▲ZEIT now](https://zeit.co/now) deployments from Visual Studio Code.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+* Authentication: request a login, verify login, set token
+* Explorer: deployments and aliases lists
+* Deployments: list, deploy a folder, set new or existing alias, delete, open in browser, open logs in browser
+* Aliases: list, open in browser, delete
 
-For example if there is an image subfolder under your extension project workspace:
+### Authentication
 
-\!\[feature X\]\(images/feature-x.png\)
+![Login](resources/login.gif)
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+### Explorer
+
+![Explorer](resources/explorer.jpg)
+
+### Deployment
+
+![Login](resources/deployment.gif)
+
+### Commands
+
+![Commands](resources/commands.jpg)
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+A ▲ZEIT now account and a [token](https://zeit.co/account/tokens) are optional. You can create an account within VS Code with the `Login` command.
+
+## Installation
+
+* Install this extension
+* Launch `Now : Login` within the Command Palette
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+If you want to turn the Explorer off for all workspaces, set the `showExplorer` configuration setting to `false`. Press `CMD+,` (or `CTRL+,` on Windows/Linux) to bring up the user level settings and add this to the right side:
 
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
+```json
+"now.showExplorer": false
+```
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 0.0.1
 
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Initial release of vscode-now
