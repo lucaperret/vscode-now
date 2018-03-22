@@ -1,6 +1,7 @@
+import * as path from 'path';
 import * as vscode from 'vscode';
 import * as fs from 'fs';
-import { deploy as deployFolder, deleteDeployment as remove, setAlias as alias } from '../utils/deployments';
+import { createDeployment, deleteDeployment as remove, setAlias as alias, DeploymentTypeType } from '../utils/deployments';
 import { DeploymentNode } from '../explorer/models';
 import { getAliasNames } from '../utils/aliases';
 
@@ -9,10 +10,36 @@ export async function deploy () {
     if (folder) {
         const pathToDeploy = folder.uri.path;
         try {
-            const result = fs.readdirSync(pathToDeploy);
-            console.log(result);
-            // await deployFolder(pathToDeploy);
-            vscode.window.showInformationMessage('Deployment successfuly deleted');
+            const files = fs.readdirSync(pathToDeploy);
+            let deployType: DeploymentTypeType;
+            const hasDockerfile = !!~files.indexOf('Dockerfile');
+            const hasPackageJson = !!~files.indexOf('package.json');
+            if (hasDockerfile && hasPackageJson) {
+                deployType = <DeploymentTypeType>await vscode.window.showQuickPick([DeploymentTypeType.NPM, DeploymentTypeType.DOCKER], { placeHolder: 'Choose a deployment type...' });
+                if (!deployType) {
+                    return vscode.window.showErrorMessage('You should determine wich deployment type.');
+                }
+            } else if (hasDockerfile) {
+                deployType = DeploymentTypeType.DOCKER;
+            } else if (hasPackageJson) {
+                deployType = DeploymentTypeType.NPM;
+            } else {
+                deployType = DeploymentTypeType.STATIC;
+            }
+            const deploymentName = await vscode.window.showInputBox({ ignoreFocusOut: true, prompt: 'Deployment name', value: path.parse(pathToDeploy).name });
+            if (deploymentName) {
+                return vscode.window.withProgress({ location: vscode.ProgressLocation.Window, title: 'Deploying on ▲ZEIT now...' }, async progress => {
+                    const url = await createDeployment(progress, pathToDeploy, deploymentName, deployType);
+                    vscode.window.showInformationMessage('Successfully deployed !', `https://${url}`)
+                        .then(clickedLink => {
+                            if (clickedLink) {
+                                vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(clickedLink));
+                            }
+                        });
+                });
+            } else {
+                vscode.window.showErrorMessage('You should provide a deployment name.');
+            }
         } catch (error) {
             vscode.window.showErrorMessage('Deployment error: ' + error.message);
         }

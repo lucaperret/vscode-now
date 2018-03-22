@@ -9,6 +9,7 @@ export default {
         VERIFY: '/now/registration/verify',
         DEPLOYMENTS: '/v2/now/deployments',
         ALIASES: '/v2/now/aliases',
-        NEW_DEPLOYMENT: '/v3/now/deployments'
+        NEW_DEPLOYMENT: '/v3/now/deployments',
+        UPLOAD_FILES: '/v2/now/files'
     }
 };

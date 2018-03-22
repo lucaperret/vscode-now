@@ -151,6 +151,7 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
+        "@types/globby": "^6.1.0",
         "@types/keytar": "^4.0.1",
         "@types/mocha": "^2.2.42",
         "@types/node": "^7.0.43",
@@ -160,7 +161,10 @@
         "vscode": "^1.1.6"
     },
     "dependencies": {
+        "globby": "^8.0.1",
+        "hasha": "^3.0.0",
         "moment": "^2.21.0",
+        "parse-gitignore": "^0.4.0",
         "request-promise-native": "^1.0.5"
     }
 }
