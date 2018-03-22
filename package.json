@@ -43,6 +43,7 @@
         "onCommand:extension.deployment.deploy",
         "onCommand:extension.deployment.delete",
         "onCommand:extension.alias.delete",
+        "onCommand:extension.alias.open",
         "onCommand:extension.explorer.refresh",
         "onView:nowExplorer"
     ],
@@ -112,6 +113,11 @@
                 "category": "Now"
             },
             {
+                "command": "extension.alias.open",
+                "title": "Open in browser",
+                "category": "Now"
+            },
+            {
                 "command": "extension.explorer.refresh",
                 "title": "Refresh",
                 "category": "Now"
@@ -157,6 +163,10 @@
                 },
                 {
                     "command": "extension.alias.delete",
+                    "when": "view == nowExplorer && viewItem == aliasNode"
+                },
+                {
+                    "command": "extension.alias.open",
                     "when": "view == nowExplorer && viewItem == aliasNode"
                 }
             ]

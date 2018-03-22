@@ -3,7 +3,7 @@
 import * as vscode from 'vscode';
 import { setToken, login, logout } from './commands/authentication';
 import { deploy, deleteDeployment, open, showLogs, setCustomAlias, setExistingAlias } from './commands/deployments';
-import { deleteAlias } from './commands/aliases';
+import { open as openAlias, deleteAlias } from './commands/aliases';
 import { NowExplorerProvider } from './explorer/nowExplorer';
 
 const nowExplorer = new NowExplorerProvider();
@@ -32,7 +32,8 @@ export function activate(context: vscode.ExtensionContext) {
         await deleteDeployment(deploymentNode);
         nowExplorer.refresh();
     }));
-
+    
+    context.subscriptions.push(vscode.commands.registerCommand('extension.alias.open', openAlias));
     context.subscriptions.push(vscode.commands.registerCommand('extension.alias.delete', async aliasNode => {
         await deleteAlias(aliasNode);
         nowExplorer.refresh();

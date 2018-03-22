@@ -14,3 +14,11 @@ export async function deleteAlias (aliasNode?: AliasNode) {
         vscode.window.showInformationMessage('Right-click on an alias in the explorer to delete it');
     }
 }
+
+export function open (aliasNode?: AliasNode) {
+    if (aliasNode) {
+        vscode.commands.executeCommand('vscode.open', vscode.Uri.parse('https://' + aliasNode.data.alias));
+    } else {
+        vscode.window.showInformationMessage('Right-click on an alias in the explorer to open the application');
+    }
+}
