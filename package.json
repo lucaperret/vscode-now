@@ -1,10 +1,18 @@
 {
     "name": "vscode-now",
-    "displayName": "Now",
-    "description": "Manage your deployments within vscode",
+    "displayName": "▲ZEIT now",
+    "description": "Create and manage your deployments and aliases.",
     "version": "0.0.1",
     "publisher": "lucaperret",
-    "repository": "lucaperret/vscode-now",
+    "homepage": "https://github.com/lucaperret/vscode-now/blob/master/README.md",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/lucaperret/vscode-now.git"
+    },
+    "bugs": {
+        "url": "https://github.com/lucaperret/vscode-now/issues"
+    },
+	"icon": "resources/now.png",
     "license": "MIT",
     "engines": {
         "vscode": "^1.21.0"
@@ -13,6 +21,17 @@
         "Snippets",
         "Other"
     ],
+    "keywords": [
+        "now",
+        "deployment",
+        "docker",
+        "node",
+        "static"
+    ],
+    "galleryBanner": {
+        "color": "#ffffff",
+        "theme": "light"
+    },
     "activationEvents": [
         "onCommand:extension.authentication.setToken",
         "onCommand:extension.authentication.login",
