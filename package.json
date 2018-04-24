@@ -2,7 +2,7 @@
     "name": "vscode-now",
     "displayName": "▲ZEIT now",
     "description": "Create and manage your deployments and aliases.",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "publisher": "lucaperret",
     "homepage": "https://github.com/lucaperret/vscode-now/blob/master/README.md",
     "repository": {
